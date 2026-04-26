@@ -12,10 +12,12 @@ import {
   ScanSearch, 
   Dices, 
   BookOpen, 
-  LayoutDashboard
+  LayoutDashboard,
+  User
 } from 'lucide-react';
 
 export const MODULES = [
+  { id: 'documentation', name: 'Operator Manual', icon: BookOpen, category: 'Overview', type: 'component' },
   { id: 'dashboard', name: 'KPI Dashboard', icon: LayoutDashboard, category: 'Overview', type: 'component' },
   { id: 'odds-comparison', name: 'Odds Comparison Engine', icon: BarChart3, category: 'Market', type: 'component' },
   { id: 'line-movement', name: 'Line Movement Tracker', icon: TrendingUp, category: 'Market', type: 'component' },
@@ -29,7 +31,8 @@ export const MODULES = [
   { id: 'weather-impact', name: 'Weather Impact Analyzer', icon: CloudRain, category: 'Reports', type: 'ai' },
   { id: 'market-efficiency', name: 'Market Efficiency Scanner', icon: ScanSearch, category: 'Market', type: 'ai' },
   { id: 'variance-simulator', name: 'Variance Simulator', icon: Dices, category: 'Risk', type: 'component' },
-  { id: 'decision-log', name: 'Decision Log Generator', icon: BookOpen, category: 'Evaluation', type: 'ai' }
+  { id: 'decision-log', name: 'Decision Log Generator', icon: BookOpen, category: 'Evaluation', type: 'ai' },
+  { id: 'about', name: 'About Lorenzo', icon: User, category: 'Admin', type: 'component' }
 ];
 
-export const CATEGORIES = ['Overview', 'Market', 'Quant', 'Risk', 'Reports', 'Evaluation'];
+export const CATEGORIES = ['Overview', 'Market', 'Quant', 'Risk', 'Reports', 'Evaluation', 'Admin'];

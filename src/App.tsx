@@ -5,13 +5,17 @@ import { EVCalculator } from './components/EVCalculator';
 import { BankrollManager } from './components/BankrollManager';
 import { OddsComparisonEngine } from './components/OddsComparisonEngine';
 import { GenerativeModule } from './components/GenerativeModule';
+import { Documentation } from './components/Documentation';
+import { About } from './components/About';
 import { MODULES } from './constants';
 
 export default function App() {
-  const [activeModule, setActiveModule] = useState('dashboard');
+  const [activeModule, setActiveModule] = useState('documentation');
 
   const renderContent = () => {
     switch (activeModule) {
+      case 'documentation':
+        return <Documentation />;
       case 'dashboard':
         return <Dashboard />;
       case 'ev-calculator':
@@ -20,6 +24,8 @@ export default function App() {
         return <BankrollManager />;
       case 'odds-comparison':
         return <OddsComparisonEngine />;
+      case 'about':
+        return <About />;
       // Fallbacks for other component-based modules that are not fully built yet
       case 'line-movement':
       case 'clv-tracker':

@@ -67,7 +67,7 @@ export function BankrollManager() {
             </div>
             
             <div>
-              <label className="block text-xs font-mono uppercase tracking-wide text-slate-400 mb-2">Assumed Edge (%)</label>
+              <label className="block text-xs font-mono uppercase tracking-wide text-slate-400 mb-2">Expected Value (EV %)</label>
               <input
                 type="number"
                 value={edge}

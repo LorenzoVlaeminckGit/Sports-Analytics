@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { generateAnalysisReport } from '../services/geminiService';
 import { Loader2, Zap } from 'lucide-react';
@@ -10,6 +10,21 @@ export function OddsComparisonEngine() {
   const [marketAverage, setMarketAverage] = useState('');
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const impliedProbability = useMemo(() => {
+    const o = parseFloat(marketAverage);
+    if (isNaN(o)) return null;
+    
+    let prob = 0;
+    if (o > 0) {
+      prob = 100 / (o + 100);
+    } else if (o < 0) {
+      prob = Math.abs(o) / (Math.abs(o) + 100);
+    } else {
+      return null;
+    }
+    return (prob * 100).toFixed(2);
+  }, [marketAverage]);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +39,7 @@ Event: ${event}
 Sportsbooks: ${sportsbooks}
 Odds: ${odds}
 Market Average Odds: ${marketAverage}
+Implied Probability (Market Average): ${impliedProbability}%
 
 Outputs required:
 - Best available price
@@ -99,6 +115,12 @@ Outputs required:
                   placeholder="e.g. -110"
                   disabled={loading}
                 />
+                {impliedProbability && (
+                  <div className="mt-2 text-xs font-mono text-cyan-400 flex items-center justify-between">
+                    <span>Implied Probability:</span>
+                    <span className="font-bold">{impliedProbability}%</span>
+                  </div>
+                )}
               </div>
               <div className="pt-4">
                 <button

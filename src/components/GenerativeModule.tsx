@@ -75,7 +75,13 @@ export function GenerativeModule({ moduleId }: { moduleId: string }) {
           <input
             type="text"
             className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
-            placeholder="e.g. Analysis for LAL vs GSW tonight focusing on injury impact..."
+            placeholder={
+              module.id === 'market-efficiency'
+                ? "e.g. Scan NFL Week 4 totals for weather-driven edge..."
+                : module.id === 'trend-analyzer'
+                ? "e.g. Analyze AST/TO ratio trends for Trae Young vs switch defenses..."
+                : "e.g. Analysis for LAL vs GSW tonight focusing on injury impact..."
+            }
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
