@@ -17,6 +17,21 @@ const clvData = [
   { date: '02/25', currentCLV: 3.6, expectedCLV: 2.9 },
 ];
 
+const trueEdgeData = [
+  { date: '01/01', edge: 2.1 },
+  { date: '01/05', edge: 3.2 },
+  { date: '01/10', edge: 1.5 },
+  { date: '01/15', edge: 4.2 },
+  { date: '01/20', edge: 5.1 },
+  { date: '01/25', edge: 6.3 },
+  { date: '01/30', edge: 4.8 },
+  { date: '02/05', edge: 7.2 },
+  { date: '02/10', edge: 5.9 },
+  { date: '02/15', edge: 6.8 },
+  { date: '02/20', edge: 7.5 },
+  { date: '02/25', edge: 8.1 },
+];
+
 export function CLVTracker() {
   return (
     <div className="flex flex-col h-full bg-transparent overflow-hidden">
@@ -85,6 +100,40 @@ export function CLVTracker() {
                 />
                 <Area type="monotone" dataKey="expectedCLV" stroke="#34d399" strokeWidth={2} fillOpacity={1} fill="url(#colorExpected)" name="Expected CLV" />
                 <Area type="monotone" dataKey="currentCLV" stroke="#22d3ee" strokeWidth={2} fillOpacity={1} fill="url(#colorActual)" name="Actual CLV" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="p-6 glass-card rounded-xl border border-white/5">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-widest">Historical True Edge Trends</h3>
+            <div className="flex space-x-4 text-xs font-mono">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-violet-400" />
+                <span className="text-slate-400">True Edge</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={trueEdgeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorEdge" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="date" stroke="#4b5563" tick={{fontSize: 12, fill: '#94a3b8'}} tickLine={false} axisLine={false} />
+                <YAxis stroke="#4b5563" tick={{fontSize: 12, fill: '#94a3b8', fontFamily: 'monospace'}} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.8)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '12px', backdropFilter: 'blur(8px)' }}
+                  itemStyle={{ color: '#e2e8f0' }}
+                  formatter={(value: any) => [`${value}%`, 'True Edge']}
+                />
+                <Area type="monotone" dataKey="edge" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorEdge)" name="True Edge" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

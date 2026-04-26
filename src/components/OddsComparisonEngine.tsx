@@ -80,7 +80,7 @@ Outputs required:
                   value={event}
                   onChange={(e) => setEvent(e.target.value)}
                   className="w-full bg-black/30 border border-white/10 rounded px-4 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
-                  placeholder="e.g. LAL vs GSW"
+                  placeholder="e.g. RMA vs FCB"
                   disabled={loading}
                 />
               </div>
@@ -91,7 +91,7 @@ Outputs required:
                   value={sportsbooks}
                   onChange={(e) => setSportsbooks(e.target.value)}
                   className="w-full bg-black/30 border border-white/10 rounded px-4 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
-                  placeholder="e.g. DraftKings, FanDuel, Pinnacle"
+                  placeholder="e.g. Pinnacle, Bet365, AsianOdds"
                   disabled={loading}
                 />
               </div>
@@ -101,7 +101,7 @@ Outputs required:
                   value={odds}
                   onChange={(e) => setOdds(e.target.value)}
                   className="w-full bg-black/30 border border-white/10 rounded px-4 py-2 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600 h-24 resize-none"
-                  placeholder="e.g. DK: -110, FD: -105, PIN: -112"
+                  placeholder="e.g. PIN: -110, B365: -105, ASIAN: -112"
                   disabled={loading}
                 />
               </div>
@@ -140,19 +140,27 @@ Outputs required:
           </div>
         </div>
 
-        <div className="w-full lg:w-2/3">
+        <div className="w-full lg:w-2/3 flex flex-col gap-6">
           {result ? (
-            <div className="h-full glass-card rounded-xl p-6 overflow-auto">
-              <h3 className="text-xs font-mono font-semibold neon-text-cyan uppercase tracking-widest mb-6 border-b border-cyan-400/20 pb-2">Analysis Output</h3>
-              <div className="prose prose-invert prose-sm max-w-none 
-                prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-slate-200
-                prose-a:text-cyan-400 prose-p:text-slate-300 prose-ul:text-slate-300
-                prose-th:text-slate-400 prose-th:font-mono prose-th:uppercase prose-th:text-xs
-                prose-td:font-mono prose-td:text-sm prose-td:text-slate-300
-                prose-table:border prose-table:border-white/10 prose-td:border-t prose-td:border-white/5">
-                <ReactMarkdown>{result}</ReactMarkdown>
+            <>
+              {impliedProbability && (
+                <div className="glass-card rounded-xl p-6 border border-cyan-500/30 bg-cyan-500/5 flex items-center justify-between shrink-0">
+                  <span className="text-sm font-mono font-semibold uppercase tracking-widest text-cyan-400">Market Implied Probability</span>
+                  <span className="text-2xl font-bold tracking-tight text-white">{impliedProbability}%</span>
+                </div>
+              )}
+              <div className="flex-1 glass-card rounded-xl p-6 overflow-auto">
+                <h3 className="text-xs font-mono font-semibold neon-text-cyan uppercase tracking-widest mb-6 border-b border-cyan-400/20 pb-2">Analysis Output</h3>
+                <div className="prose prose-invert prose-sm max-w-none 
+                  prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-slate-200
+                  prose-a:text-cyan-400 prose-p:text-slate-300 prose-ul:text-slate-300
+                  prose-th:text-slate-400 prose-th:font-mono prose-th:uppercase prose-th:text-xs
+                  prose-td:font-mono prose-td:text-sm prose-td:text-slate-300
+                  prose-table:border prose-table:border-white/10 prose-td:border-t prose-td:border-white/5">
+                  <ReactMarkdown>{result}</ReactMarkdown>
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             <div className="h-full glass-card rounded-xl flex items-center justify-center text-center p-6 border border-white/5 border-dashed">
               <div className="max-w-md">

@@ -11,6 +11,8 @@ export function GenerativeModule({ moduleId }: { moduleId: string }) {
   const [prompt, setPrompt] = useState('');
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState('English');
+  const [includeVisuals, setIncludeVisuals] = useState(true);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +21,10 @@ export function GenerativeModule({ moduleId }: { moduleId: string }) {
     setLoading(true);
     setResult(null);
     try {
-      const data = await generateAnalysisReport(prompt, module.name);
+      const data = await generateAnalysisReport(prompt, module.name, {
+        language,
+        includeVisuals: module.id === 'trend-analyzer' ? includeVisuals : false
+      });
       setResult(data);
       
       if (auth.currentUser && data) {
@@ -90,29 +95,58 @@ export function GenerativeModule({ moduleId }: { moduleId: string }) {
       </div>
 
       <div className="p-4 border-t border-white/5 bg-black/20 backdrop-blur-md">
-        <form onSubmit={handleGenerate} className="max-w-4xl mx-auto flex space-x-4">
-          <input
-            type="text"
-            className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
-            placeholder={
-              module.id === 'market-efficiency'
-                ? "e.g. Scan NFL Week 4 totals for weather-driven edge..."
-                : module.id === 'trend-analyzer'
-                ? "e.g. Analyze AST/TO ratio trends for Trae Young vs switch defenses..."
-                : "e.g. Analysis for LAL vs GSW tonight focusing on injury impact..."
-            }
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            disabled={loading || !prompt.trim()}
-            className="bg-cyan-500/10 text-cyan-400 border border-cyan-400/30 px-6 py-2 rounded font-medium text-sm flex items-center space-x-2 hover:bg-cyan-500/20 disabled:opacity-50 transition-colors"
-          >
-            <span>Run</span>
-            <Send size={16} />
-          </button>
+        <form onSubmit={handleGenerate} className="max-w-4xl mx-auto flex flex-col space-y-3">
+          <div className="flex space-x-4">
+            <input
+              type="text"
+              className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
+              placeholder={
+                module.id === 'market-efficiency'
+                  ? "e.g. Scan EPL Matchday totals for weather-driven edge..."
+                  : module.id === 'trend-analyzer'
+                  ? "e.g. Analyze xG/xGA ratio trends for Arsenal vs mid/low block defenses..."
+                  : "e.g. Tactical analysis for Real Madrid vs Bayern tonight focusing on injury impact..."
+              }
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              disabled={loading}
+            />
+            <button
+              type="submit"
+              disabled={loading || !prompt.trim()}
+              className="bg-cyan-500/10 text-cyan-400 border border-cyan-400/30 px-6 py-2 rounded font-medium text-sm flex items-center space-x-2 hover:bg-cyan-500/20 disabled:opacity-50 transition-colors"
+            >
+              <span>Run</span>
+              <Send size={16} />
+            </button>
+          </div>
+          
+          <div className="flex items-center space-x-4 px-2">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-slate-300 font-mono focus:outline-none focus:border-cyan-400"
+              disabled={loading}
+            >
+              <option value="English">English</option>
+              <option value="Dutch">Dutch</option>
+              <option value="Spanish">Spanish</option>
+              <option value="Italian">Italian</option>
+            </select>
+            
+            {module.id === 'trend-analyzer' && (
+              <label className="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={includeVisuals}
+                  onChange={(e) => setIncludeVisuals(e.target.checked)}
+                  className="rounded border-white/10 bg-black/30 text-cyan-400 focus:ring-cyan-400/50"
+                  disabled={loading}
+                />
+                <span>Include Data Visualizations (Graphs/Diagrams)</span>
+              </label>
+            )}
+          </div>
         </form>
       </div>
     </div>
