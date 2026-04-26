@@ -27,7 +27,7 @@ export function EVCalculator() {
       impliedProb: (impliedProb * 100).toFixed(2),
       ev: (ev * 100).toFixed(2),
       edge: (edge * 100).toFixed(2),
-      risk: edge > 0.05 ? 'High Value' : edge > 0 ? 'Moderate Edge' : 'No Value (Negative EV)'
+      risk: edge > 0.05 ? 'High Value' : edge > 0 ? 'Moderate Edge' : 'No Value'
     };
   };
 
@@ -94,7 +94,7 @@ export function EVCalculator() {
               
               {/* Prominent Risk Classification */}
               <div className="mt-8 pt-4 border-t border-white/10">
-                <span className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-3 text-center">System Recommendation</span>
+                <span className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-3 text-center">Risk Classification</span>
                 <div className={`p-4 rounded-xl border flex items-center justify-center ${
                   results.risk === 'High Value' 
                     ? 'bg-emerald-500/10 border-emerald-500/30' 

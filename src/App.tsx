@@ -8,6 +8,7 @@ import { GenerativeModule } from './components/GenerativeModule';
 import { Documentation } from './components/Documentation';
 import { About } from './components/About';
 import { DecisionLog } from './components/DecisionLog';
+import { CLVTracker } from './components/CLVTracker';
 import { MODULES } from './constants';
 
 export default function App() {
@@ -29,9 +30,10 @@ export default function App() {
         return <About />;
       case 'decision-log':
         return <DecisionLog />;
+      case 'clv-tracker':
+        return <CLVTracker />;
       // Fallbacks for other component-based modules that are not fully built yet
       case 'line-movement':
-      case 'clv-tracker':
       case 'multi-model':
       case 'variance-simulator':
         return (
