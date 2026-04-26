@@ -91,11 +91,27 @@ export function EVCalculator() {
                   {parseFloat(results.edge) > 0 ? '+' : ''}{results.edge}%
                 </span>
               </div>
-              <div className="pt-2">
-                <span className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-1">Risk Classification</span>
-                <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold uppercase bg-black/30 text-slate-300 border border-white/5">
-                  {results.risk}
-                </span>
+              
+              {/* Prominent Risk Classification */}
+              <div className="mt-8 pt-4 border-t border-white/10">
+                <span className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-3 text-center">System Recommendation</span>
+                <div className={`p-4 rounded-xl border flex items-center justify-center ${
+                  results.risk === 'High Value' 
+                    ? 'bg-emerald-500/10 border-emerald-500/30' 
+                    : results.risk === 'Moderate Edge'
+                      ? 'bg-amber-500/10 border-amber-500/30'
+                      : 'bg-red-500/10 border-red-500/30'
+                }`}>
+                  <span className={`text-lg font-bold uppercase tracking-wider ${
+                    results.risk === 'High Value' 
+                      ? 'text-emerald-400' 
+                      : results.risk === 'Moderate Edge'
+                        ? 'text-amber-400'
+                        : 'text-red-400'
+                  }`}>
+                    {results.risk}
+                  </span>
+                </div>
               </div>
             </div>
           ) : (

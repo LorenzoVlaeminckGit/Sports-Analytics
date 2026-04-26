@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return request.auth.token.email_verified == true; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidReport(data) {
+      return data.keys().hasAll(['moduleId', 'prompt', 'result', 'createdAt']) &&
+             data.moduleId is string && data.moduleId.size() <= 200 &&
+             data.prompt is string && data.prompt.size() <= 10000 &&
+             data.result is string && data.result.size() <= 100000 &&
+             data.createdAt == request.time &&
+             (!('userId' in data) || (data.userId is string && data.userId == request.auth.uid));
+    }
+
+    match /users/{userId}/reports/{reportId} {
+      // Validate path ID
+      allow read, delete: if isSignedIn() && isValidId(userId) && isValidId(reportId) && request.auth.uid == userId;
+      
+      allow list: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+
+      allow create: if isSignedIn() && 
+                    isValidId(userId) && 
+                    isValidId(reportId) && 
+                    request.auth.uid == userId && 
+                    isValidReport(incoming());
+
+      // Reports are mostly append-only or immutable. We won't allow updates to the text, maybe just deletion.
+      allow update: if false; 
+    }
+  }
+}

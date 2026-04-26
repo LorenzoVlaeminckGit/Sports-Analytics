@@ -1,7 +1,8 @@
 import React from 'react';
 import { CATEGORIES, MODULES } from '../constants';
 import { clsx } from 'clsx';
-import { Network } from 'lucide-react';
+import { Network, LogIn, LogOut } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
 
 interface SidebarProps {
   activeModule: string;
@@ -9,6 +10,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
+  const { user, signIn, logOut } = useAuth();
+  
   return (
     <aside className="w-64 bg-black/20 border-r border-white/5 h-screen overflow-y-auto flex flex-col shrink-0">
       <div className="p-4 border-b border-white/5 flex items-center space-x-3">
@@ -48,6 +51,21 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
             </div>
           </div>
         ))}
+      </div>
+      
+      <div className="p-4 border-t border-white/5">
+        {user ? (
+          <div className="flex flex-col gap-2 text-sm text-slate-400">
+            <div className="truncate text-xs">{user.email}</div>
+            <button onClick={logOut} className="flex items-center gap-2 hover:text-white transition-colors">
+              <LogOut size={16} /> Sign out
+            </button>
+          </div>
+        ) : (
+          <button onClick={signIn} className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
+            <LogIn size={16} /> Sign in
+          </button>
+        )}
       </div>
     </aside>
   );

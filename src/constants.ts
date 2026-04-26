@@ -31,7 +31,7 @@ export const MODULES = [
   { id: 'weather-impact', name: 'Weather Impact Analyzer', icon: CloudRain, category: 'Reports', type: 'ai' },
   { id: 'market-efficiency', name: 'Market Efficiency Scanner', icon: ScanSearch, category: 'Market', type: 'ai' },
   { id: 'variance-simulator', name: 'Variance Simulator', icon: Dices, category: 'Risk', type: 'component' },
-  { id: 'decision-log', name: 'Decision Log Generator', icon: BookOpen, category: 'Evaluation', type: 'ai' },
+  { id: 'decision-log', name: 'Decision Log Generator', icon: BookOpen, category: 'Evaluation', type: 'component' },
   { id: 'about', name: 'About Lorenzo', icon: User, category: 'Admin', type: 'component' }
 ];
 

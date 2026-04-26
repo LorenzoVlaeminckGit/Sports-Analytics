@@ -7,6 +7,7 @@ import { OddsComparisonEngine } from './components/OddsComparisonEngine';
 import { GenerativeModule } from './components/GenerativeModule';
 import { Documentation } from './components/Documentation';
 import { About } from './components/About';
+import { DecisionLog } from './components/DecisionLog';
 import { MODULES } from './constants';
 
 export default function App() {
@@ -26,6 +27,8 @@ export default function App() {
         return <OddsComparisonEngine />;
       case 'about':
         return <About />;
+      case 'decision-log':
+        return <DecisionLog />;
       // Fallbacks for other component-based modules that are not fully built yet
       case 'line-movement':
       case 'clv-tracker':

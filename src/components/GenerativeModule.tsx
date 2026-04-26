@@ -3,6 +3,8 @@ import ReactMarkdown from 'react-markdown';
 import { generateAnalysisReport } from '../services/geminiService';
 import { Loader2, Send } from 'lucide-react';
 import { MODULES } from '../constants';
+import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export function GenerativeModule({ moduleId }: { moduleId: string }) {
   const module = MODULES.find(m => m.id === moduleId);
@@ -19,6 +21,23 @@ export function GenerativeModule({ moduleId }: { moduleId: string }) {
     try {
       const data = await generateAnalysisReport(prompt, module.name);
       setResult(data);
+      
+      if (auth.currentUser && data) {
+        const reportId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
+        const path = `users/${auth.currentUser.uid}/reports/${reportId}`;
+        try {
+          await setDoc(doc(db, path), {
+            id: reportId,
+            moduleId: module.id,
+            prompt: prompt,
+            result: data,
+            createdAt: Date.now(),
+            userId: auth.currentUser.uid
+          });
+        } catch (error) {
+          handleFirestoreError(error, OperationType.CREATE, path);
+        }
+      }
     } catch (err) {
       console.error(err);
       setResult("Error generating analysis.");
