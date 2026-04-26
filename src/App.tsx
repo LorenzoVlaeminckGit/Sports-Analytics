@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { EVCalculator } from './components/EVCalculator';
@@ -56,6 +57,7 @@ export default function App() {
       <main className="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
         {renderContent()}
       </main>
+      <Analytics />
     </div>
   );
 }
