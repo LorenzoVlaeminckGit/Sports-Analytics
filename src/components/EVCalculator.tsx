@@ -85,11 +85,28 @@ export function EVCalculator() {
                   {parseFloat(results.ev) > 0 ? '+' : ''}{results.ev}%
                 </span>
               </div>
-              <div className="flex justify-between items-baseline border-b border-white/5 pb-2">
-                <span className="text-slate-400 text-sm">True Edge</span>
-                <span className={`font-mono ${parseFloat(results.edge) > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                  {parseFloat(results.edge) > 0 ? '+' : ''}{results.edge}%
-                </span>
+              <div className="border-b border-white/5 pb-4 space-y-2">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-slate-400 text-sm">True Edge</span>
+                  <span className={`font-mono ${parseFloat(results.edge) > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {parseFloat(results.edge) > 0 ? '+' : ''}{results.edge}%
+                  </span>
+                </div>
+                {/* Visual Bar for Edge relative to 0% benchmark */}
+                <div className="relative w-full h-1.5 bg-black/50 rounded-full overflow-hidden mt-2">
+                  <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20 z-10" />
+                  {parseFloat(results.edge) > 0 ? (
+                    <div 
+                      className="absolute left-1/2 top-0 bottom-0 bg-emerald-500 rounded-r-full"
+                      style={{ width: `${Math.min(parseFloat(results.edge) * 5, 50)}%` }}
+                    />
+                  ) : (
+                    <div 
+                      className="absolute right-1/2 top-0 bottom-0 bg-red-500 rounded-l-full"
+                      style={{ width: `${Math.min(Math.abs(parseFloat(results.edge)) * 5, 50)}%` }}
+                    />
+                  )}
+                </div>
               </div>
               
               {/* Prominent Risk Classification */}

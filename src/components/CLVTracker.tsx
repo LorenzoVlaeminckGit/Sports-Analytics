@@ -32,6 +32,21 @@ const trueEdgeData = [
   { date: '02/25', edge: 8.1 },
 ];
 
+const winProbabilityData = [
+  { date: '01/01', winProb: 52.4 },
+  { date: '01/05', winProb: 54.1 },
+  { date: '01/10', winProb: 49.8 },
+  { date: '01/15', winProb: 55.2 },
+  { date: '01/20', winProb: 56.5 },
+  { date: '01/25', winProb: 58.1 },
+  { date: '01/30', winProb: 53.4 },
+  { date: '02/05', winProb: 59.2 },
+  { date: '02/10', winProb: 57.1 },
+  { date: '02/15', winProb: 58.8 },
+  { date: '02/20', winProb: 60.5 },
+  { date: '02/25', winProb: 61.2 },
+];
+
 export function CLVTracker() {
   return (
     <div className="flex flex-col h-full bg-transparent overflow-hidden">
@@ -134,6 +149,40 @@ export function CLVTracker() {
                   formatter={(value: any) => [`${value}%`, 'True Edge']}
                 />
                 <Area type="monotone" dataKey="edge" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorEdge)" name="True Edge" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="p-6 glass-card rounded-xl border border-white/5">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-widest">Historical Win Probability</h3>
+            <div className="flex space-x-4 text-xs font-mono">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-amber-400" />
+                <span className="text-slate-400">Win Probability</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={winProbabilityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorWinProb" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#fbbf24" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#fbbf24" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="date" stroke="#4b5563" tick={{fontSize: 12, fill: '#94a3b8'}} tickLine={false} axisLine={false} />
+                <YAxis stroke="#4b5563" tick={{fontSize: 12, fill: '#94a3b8', fontFamily: 'monospace'}} tickLine={false} axisLine={false} tickFormatter={(val) => `${val}%`} domain={['dataMin - 5', 'dataMax + 5']} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.8)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '12px', backdropFilter: 'blur(8px)' }}
+                  itemStyle={{ color: '#e2e8f0' }}
+                  formatter={(value: any) => [`${value}%`, 'Win Probability']}
+                />
+                <Area type="monotone" dataKey="winProb" stroke="#fbbf24" strokeWidth={2} fillOpacity={1} fill="url(#colorWinProb)" name="Win Probability" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

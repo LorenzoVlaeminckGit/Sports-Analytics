@@ -13,11 +13,11 @@ import {
   Dices, 
   BookOpen, 
   LayoutDashboard,
-  User
+  User,
+  Bookmark
 } from 'lucide-react';
 
 export const MODULES = [
-  { id: 'documentation', name: 'Operator Manual', icon: BookOpen, category: 'Overview', type: 'component' },
   { id: 'dashboard', name: 'KPI Dashboard', icon: LayoutDashboard, category: 'Overview', type: 'component' },
   { id: 'odds-comparison', name: 'Odds Comparison Engine', icon: BarChart3, category: 'Market', type: 'component' },
   { id: 'line-movement', name: 'Line Movement Tracker', icon: TrendingUp, category: 'Market', type: 'component' },
@@ -29,10 +29,12 @@ export const MODULES = [
   { id: 'trend-analyzer', name: 'Trend Analyzer', icon: Activity, category: 'Reports', type: 'ai' },
   { id: 'injury-impact', name: 'Injury Impact Analyzer', icon: Stethoscope, category: 'Reports', type: 'ai' },
   { id: 'weather-impact', name: 'Weather Impact Analyzer', icon: CloudRain, category: 'Reports', type: 'ai' },
-  { id: 'market-efficiency', name: 'Market Efficiency Scanner', icon: ScanSearch, category: 'Market', type: 'ai' },
+  { id: 'market-efficiency', name: 'Market Efficiency Scanner', icon: ScanSearch, category: 'Market', type: 'component' },
   { id: 'variance-simulator', name: 'Variance Simulator', icon: Dices, category: 'Risk', type: 'component' },
   { id: 'decision-log', name: 'Decision Log Generator', icon: BookOpen, category: 'Evaluation', type: 'component' },
-  { id: 'about', name: 'About Lorenzo', icon: User, category: 'Admin', type: 'component' }
+  { id: 'resources', name: 'Betting Resources', icon: Bookmark, category: 'Resources', type: 'component' },
+  { id: 'about', name: 'About Lorenzo', icon: User, category: 'Admin', type: 'component' },
+  { id: 'documentation', name: 'Operator Manual', icon: BookOpen, category: 'Admin', type: 'component' }
 ];
 
-export const CATEGORIES = ['Overview', 'Market', 'Quant', 'Risk', 'Reports', 'Evaluation', 'Admin'];
+export const CATEGORIES = ['Overview', 'Market', 'Quant', 'Risk', 'Reports', 'Evaluation', 'Resources', 'Admin'];

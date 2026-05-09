@@ -33,14 +33,18 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
       </div>
       
       <div className="flex-1 py-6 px-4 relative z-10 space-y-8">
-        {CATEGORIES.map(category => (
+        {CATEGORIES.map(category => {
+          const categoryModules = MODULES.filter(m => m.category === category && m.id !== 'documentation');
+          if (categoryModules.length === 0) return null;
+          
+          return (
           <div key={category} className="space-y-3">
             <div className="flex items-center space-x-2 px-2">
               <h2 className="font-mono text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{category}</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             </div>
             <div className="space-y-1">
-              {MODULES.filter(m => m.category === category).map(module => {
+              {categoryModules.map(module => {
                 const Icon = module.icon;
                 const isActive = activeModule === module.id;
                 return (
@@ -70,7 +74,24 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
               })}
             </div>
           </div>
-        ))}
+        )})}
+      </div>
+      
+      <div className="px-4 pb-4 relative z-10">
+        <button
+          onClick={() => setActiveModule('documentation')}
+          className={clsx(
+            "w-full px-3 py-2.5 rounded-xl flex items-center justify-between transition-all duration-300 text-sm border border-white/5",
+            activeModule === 'documentation'
+              ? "bg-cyan-500/10 text-cyan-300 border-cyan-500/30" 
+              : "bg-slate-900/50 text-slate-400 hover:text-slate-200 hover:bg-white/5"
+          )}
+        >
+          <div className="flex items-center space-x-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={clsx("transition-all duration-300", activeModule === 'documentation' ? "text-cyan-400 neon-text-cyan scale-110" : "opacity-70")}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span className={clsx("font-medium tracking-tight", activeModule === 'documentation' ? "font-semibold" : "")}>Operator Manual</span>
+          </div>
+        </button>
       </div>
       
       <div className="p-5 mx-4 mb-4 rounded-xl glass-card border border-white/5 relative z-10 flex flex-col justify-center">

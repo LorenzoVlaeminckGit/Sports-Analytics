@@ -5,10 +5,12 @@ import { EVCalculator } from './components/EVCalculator';
 import { BankrollManager } from './components/BankrollManager';
 import { OddsComparisonEngine } from './components/OddsComparisonEngine';
 import { GenerativeModule } from './components/GenerativeModule';
+import { MarketEfficiencyScanner } from './components/MarketEfficiencyScanner';
 import { Documentation } from './components/Documentation';
 import { About } from './components/About';
 import { DecisionLog } from './components/DecisionLog';
 import { CLVTracker } from './components/CLVTracker';
+import { Resources } from './components/Resources';
 import { MODULES } from './constants';
 
 export default function App() {
@@ -32,6 +34,10 @@ export default function App() {
         return <DecisionLog />;
       case 'clv-tracker':
         return <CLVTracker />;
+      case 'market-efficiency':
+        return <MarketEfficiencyScanner />;
+      case 'resources':
+        return <Resources />;
       // Fallbacks for other component-based modules that are not fully built yet
       case 'line-movement':
       case 'multi-model':
