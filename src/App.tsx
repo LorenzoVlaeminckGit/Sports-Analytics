@@ -12,6 +12,7 @@ import { DecisionLog } from './components/DecisionLog';
 import { CLVTracker } from './components/CLVTracker';
 import { Resources } from './components/Resources';
 import { MODULES } from './constants';
+import { ThemeProvider } from './lib/ThemeContext';
 
 export default function App() {
   const [activeModule, setActiveModule] = useState('documentation');
@@ -57,11 +58,13 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gradient-main text-slate-200 font-sans selection:bg-cyan-500/30">
-      <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
-      <main className="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
-        {renderContent()}
-      </main>
-    </div>
+    <ThemeProvider>
+      <div className="flex h-screen w-full bg-gradient-main text-slate-200 font-sans selection:bg-cyan-500/30">
+        <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
+        <main className="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
+          {renderContent()}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }

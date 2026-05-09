@@ -1,8 +1,9 @@
 import React from 'react';
 import { CATEGORIES, MODULES } from '../constants';
 import { clsx } from 'clsx';
-import { Network, LogIn, LogOut, ChevronRight } from 'lucide-react';
+import { Network, LogIn, LogOut, ChevronRight, Moon, Sun } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
+import { useTheme } from '../lib/ThemeContext';
 
 interface SidebarProps {
   activeModule: string;
@@ -11,25 +12,32 @@ interface SidebarProps {
 
 export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
   const { user, signIn, logOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   
   return (
     <aside className="w-72 bg-black/40 backdrop-blur-xl border-r border-cyan-500/10 h-screen overflow-y-auto flex flex-col shrink-0 rounded-r-2xl shadow-[4px_0_24px_rgba(34,211,238,0.05)] z-10 relative">
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-cyan-500/5 to-transparent opacity-50" />
       
-      <div className="p-6 border-b border-white/5 flex items-center space-x-4 relative z-10">
-        <div className="relative group cursor-pointer">
-          <div className="absolute inset-0 bg-cyan-400 rounded-lg blur opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
-          <div className="w-10 h-10 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-cyan-400 relative z-10">
-            <Network size={22} className="group-hover:scale-110 transition-transform duration-300" />
+      <div className="p-6 border-b border-white/5 flex items-center justify-between space-x-4 relative z-10">
+        <div className="flex items-center space-x-4">
+          <div className="relative group cursor-pointer">
+            <div className="absolute inset-0 bg-cyan-400 rounded-lg blur opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
+            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-cyan-400 relative z-10">
+              <Network size={22} className="group-hover:scale-110 transition-transform duration-300" />
+            </div>
+          </div>
+          <div>
+            <h1 className="font-sans font-bold text-sm tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">SportsAnalytics OS</h1>
+            <div className="flex items-center space-x-2 mt-0.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+              <p className="font-mono text-[10px] text-cyan-400 uppercase tracking-widest font-semibold">Quant Edition</p>
+            </div>
           </div>
         </div>
-        <div>
-          <h1 className="font-sans font-bold text-sm tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">SportsAnalytics OS</h1>
-          <div className="flex items-center space-x-2 mt-0.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-            <p className="font-mono text-[10px] text-cyan-400 uppercase tracking-widest font-semibold">Quant Edition</p>
-          </div>
-        </div>
+        
+        <button onClick={toggleTheme} className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-cyan-400 transition-colors">
+          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
       </div>
       
       <div className="flex-1 py-6 px-4 relative z-10 space-y-8">
