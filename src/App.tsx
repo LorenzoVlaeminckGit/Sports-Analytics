@@ -11,14 +11,17 @@ import { About } from './components/About';
 import { DecisionLog } from './components/DecisionLog';
 import { CLVTracker } from './components/CLVTracker';
 import { Resources } from './components/Resources';
+import { AppGuide } from './components/AppGuide';
 import { MODULES } from './constants';
 import { ThemeProvider } from './lib/ThemeContext';
 
 export default function App() {
-  const [activeModule, setActiveModule] = useState('documentation');
+  const [activeModule, setActiveModule] = useState('app-guide');
 
   const renderContent = () => {
     switch (activeModule) {
+      case 'app-guide':
+        return <AppGuide />;
       case 'documentation':
         return <Documentation />;
       case 'dashboard':

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 
 export const MODULES = [
+  { id: 'app-guide', name: 'App Guide & Features', icon: BookOpen, category: 'Overview', type: 'component' },
   { id: 'dashboard', name: 'KPI Dashboard', icon: LayoutDashboard, category: 'Overview', type: 'component' },
   { id: 'odds-comparison', name: 'Odds Comparison Engine', icon: BarChart3, category: 'Market', type: 'component' },
   { id: 'line-movement', name: 'Line Movement Tracker', icon: TrendingUp, category: 'Market', type: 'component' },

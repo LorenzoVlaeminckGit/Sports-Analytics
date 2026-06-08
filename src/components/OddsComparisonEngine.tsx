@@ -14,6 +14,7 @@ export function OddsComparisonEngine() {
   
   const [fetchingOdds, setFetchingOdds] = useState(false);
   const [oddsError, setOddsError] = useState<string | null>(null);
+  const [targetBookies, setTargetBookies] = useState('pinnacle, draftkings, betmgm, bet365, fanduel');
 
   const fetchRealTimeOdds = async () => {
     const apiKey = import.meta.env.VITE_ODDS_API_KEY;
@@ -26,7 +27,14 @@ export function OddsComparisonEngine() {
     setOddsError(null);
 
     try {
-      const res = await fetch(`https://api.the-odds-api.com/v4/sports/soccer_epl/odds/?apiKey=${apiKey}&regions=eu,uk,us&markets=h2h&oddsFormat=american&limit=1`);
+      let url = `https://api.the-odds-api.com/v4/sports/soccer_epl/odds/?apiKey=${apiKey}&regions=eu,uk,us&markets=h2h&oddsFormat=american&limit=1`;
+      
+      const bookiesList = targetBookies.split(',').map(b => b.trim()).filter(Boolean).join(',');
+      if (bookiesList) {
+         url += `&bookmakers=${bookiesList}`;
+      }
+
+      const res = await fetch(url);
       
       if (!res.ok) {
         throw new Error(`API Error: ${res.status} ${res.statusText}`);
@@ -119,6 +127,27 @@ export function OddsComparisonEngine() {
     return parsedData;
   }, [odds]);
 
+  const varianceData = useMemo(() => {
+    if (chartData.length < 2) return null;
+    
+    const probs = chartData.map(d => d.impliedProb);
+    const minProb = Math.min(...probs);
+    const maxProb = Math.max(...probs);
+    const range = maxProb - minProb;
+    
+    const avgProb = probs.reduce((a, b) => a + b, 0) / probs.length;
+    const variance = probs.reduce((a, b) => a + Math.pow(b - avgProb, 2), 0) / probs.length;
+    const stdDev = Math.sqrt(variance);
+    
+    return {
+      min: minProb,
+      max: maxProb,
+      range,
+      stdDev,
+      avg: avgProb
+    };
+  }, [chartData]);
+
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!event.trim() || !sportsbooks.trim() || !odds.trim() || !marketAverage.trim()) return;
@@ -188,6 +217,17 @@ Outputs required:
             )}
             
             <form onSubmit={handleGenerate} className="space-y-4">
+              <div className="mb-4 bg-black/20 p-3 rounded border border-white/5">
+                <label className="block text-xs font-mono uppercase tracking-wide text-slate-400 mb-2">Target Bookies (Live Odds Fetch)</label>
+                <input
+                  type="text"
+                  value={targetBookies}
+                  onChange={(e) => setTargetBookies(e.target.value)}
+                  className="w-full bg-black/30 border border-white/10 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono transition-shadow placeholder:text-slate-600"
+                  placeholder="e.g. pinnacle, bet365, fanduel (leave empty for all)"
+                  disabled={fetchingOdds}
+                />
+              </div>
               <div>
                 <label className="block text-xs font-mono uppercase tracking-wide text-slate-400 mb-2">Event / Matchup</label>
                 <input
@@ -256,7 +296,7 @@ Outputs required:
         </div>
 
         <div className="w-full lg:w-2/3 flex flex-col gap-6">
-          {chartData.length > 0 && (
+           {chartData.length > 0 && (
              <div className="glass-card rounded-xl p-6 shrink-0 border border-white/5">
                <h3 className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Odds Distribution</h3>
                <div className="h-48 w-full">
@@ -278,6 +318,65 @@ Outputs required:
                    </BarChart>
                  </ResponsiveContainer>
                </div>
+             </div>
+          )}
+
+          {varianceData && (
+             <div className="glass-card rounded-xl p-6 shrink-0 border border-white/5 flex flex-col">
+                <h3 className="text-xs font-mono font-semibold text-slate-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Market Variance Indicator</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-black/20 p-4 rounded-lg border border-white/5">
+                    <p className="text-xs text-slate-500 font-mono mb-1">Standard Dev</p>
+                    <p className={`text-xl font-bold font-mono ${varianceData.stdDev > 2 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      {varianceData.stdDev.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-black/20 p-4 rounded-lg border border-white/5">
+                    <p className="text-xs text-slate-500 font-mono mb-1">Max Disagreement</p>
+                    <p className="text-xl font-bold font-mono text-cyan-400">
+                      {varianceData.range.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-black/20 p-4 rounded-lg border border-white/5">
+                    <p className="text-xs text-slate-500 font-mono mb-1">Lowest Implied</p>
+                    <p className="text-xl font-bold font-mono text-white">
+                      {varianceData.min.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-black/20 p-4 rounded-lg border border-white/5">
+                    <p className="text-xs text-slate-500 font-mono mb-1">Highest Implied</p>
+                    <p className="text-xl font-bold font-mono text-white">
+                      {varianceData.max.toFixed(2)}%
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-6">
+                  <div className="flex justify-between text-xs text-slate-500 mb-2 font-mono">
+                    <span>{Math.floor(varianceData.min - 1)}%</span>
+                    <span>Implied Probability Spread</span>
+                    <span>{Math.ceil(varianceData.max + 1)}%</span>
+                  </div>
+                  <div className="h-4 w-full bg-black/40 rounded-full relative overflow-hidden border border-white/5">
+                    <div 
+                      className="absolute top-0 bottom-0 bg-cyan-500/20"
+                      style={{ 
+                        left: `${((varianceData.min - Math.floor(varianceData.min - 1)) / (Math.ceil(varianceData.max + 1) - Math.floor(varianceData.min - 1))) * 100}%`,
+                        right: `${100 - ((varianceData.max - Math.floor(varianceData.min - 1)) / (Math.ceil(varianceData.max + 1) - Math.floor(varianceData.min - 1))) * 100}%`
+                      }}
+                    />
+                    {chartData.map((d, i) => (
+                      <div 
+                        key={i}
+                        className="absolute top-0 bottom-0 w-1 bg-cyan-400 rounded-full"
+                        style={{
+                          left: `calc(${((d.impliedProb - Math.floor(varianceData.min - 1)) / (Math.ceil(varianceData.max + 1) - Math.floor(varianceData.min - 1))) * 100}% - 2px)`
+                        }}
+                        title={`${d.bookmaker}: ${d.impliedProb.toFixed(2)}%`}
+                      />
+                    ))}
+                  </div>
+                </div>
              </div>
           )}
 
